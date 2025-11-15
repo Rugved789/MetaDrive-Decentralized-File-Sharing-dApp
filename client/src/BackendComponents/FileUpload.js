@@ -32,14 +32,18 @@ const FileUpload = ({ contract, account }) => {
         }
       );
 
-      const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
+      const cid = resFile.data.IpfsHash;
+
+      // Store filename together with CID so frontend can detect file type later
+      // Format: ipfs://<CID>||<original-filename>
+      const storedValue = `ipfs://${cid}||${file.name}`;
 
       // Blockchain transaction
-      const tx = await contract.add(account, ImgHash);
+      const tx = await contract.add(account, storedValue);
       await tx.wait(); // Wait until transaction is mined
 
-      alert("✅ Image successfully uploaded!");
-      setFileName("No image selected");
+      alert("✅ File successfully uploaded!");
+      setFileName("No file selected");
       setFile(null);
     } catch (error) {
       console.error("Upload failed:", error);
@@ -68,7 +72,7 @@ const FileUpload = ({ contract, account }) => {
 
       <form className="form" onSubmit={handleSubmit}>
         <label htmlFor="file-upload" className="choose">
-          Choose Image
+          Choose File
         </label>
         <input
           disabled={!account || loading} 
@@ -77,7 +81,7 @@ const FileUpload = ({ contract, account }) => {
           name="data"
           onChange={retrieveFile}
         />
-        <span className="textArea">Image: {fileName}</span>
+        <span className="textArea">File: {fileName}</span>
         <button type="submit" className="upload" disabled={!file || loading}>
           Upload File
         </button>
