@@ -1,6 +1,59 @@
 import "../styles/intro.css";
+import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import metadriveVideo from "./MetaDrive_ Decentralized Future (1).mp4";
 
 function Intro() {
+  const [expanded, setExpanded] = useState(false);
+  const videoRef = useRef(null);
+
+  // prefer the bundled video in the FrontendComponents folder
+  const demoSrc = metadriveVideo || process.env.REACT_APP_DEMO_VIDEO || "/demo.mp4";
+
+  const enterExpanded = () => {
+    // expand to full screen overlay and play
+    setExpanded(true);
+    // allow DOM to update then play
+    setTimeout(() => {
+      const v = videoRef.current;
+      if (v) {
+        v.currentTime = 0;
+        v.play().catch((e) => console.warn("play error", e));
+      }
+    }, 60);
+  };
+
+  const exitExpanded = () => {
+    const v = videoRef.current;
+    if (v) {
+      try {
+        v.pause();
+        v.currentTime = 0;
+      } catch (e) {}
+    }
+    setExpanded(false);
+  };
+
+  const handleWatchClick = () => {
+    // user gesture -> expand and start playback
+    enterExpanded();
+  };
+
+  const handleVideoEnded = () => {
+    // revert to small box
+    exitExpanded();
+  };
+
+  useEffect(() => {
+    return () => {
+      const v = videoRef.current;
+      if (v) {
+        try {
+          v.pause();
+        } catch (e) {}
+      }
+    };
+  }, []);
   return (
     <section className="main">
       <div className="intro-container">
@@ -20,8 +73,12 @@ function Intro() {
             </p>
           </div>
           <div className="start">
-            <button className="start-button">Get Started Free</button>
-            <button className="watch">Watch Demo</button>
+            <Link to="/backend">
+              <button className="start-button">Get Started Free</button>
+            </Link>
+            <button className="watch" onClick={handleWatchClick}>
+              Watch Demo
+            </button>
           </div>
           <div className="points">
             <div className="pointBox">
@@ -68,16 +125,37 @@ function Intro() {
             </div>
           </div>
         </div>
-        <div className="image/video">
+        <div className={`media-container ${expanded ? "expanded" : ""}`}>
           <div className="imageContainer">
             <div className="imageHolder">
-              <img
-                src="https://media.istockphoto.com/id/1321965054/photo/network-of-interconnected-people-interactions-between-employees-and-working-groups-social.jpg?s=612x612&w=0&k=20&c=wL_foyV3Z_9eaiHbSXaDRwr8Fslvb8yxohegQ70NrF8="
-                alt="DecentralDrive Dashboard"
-                className="dashboard-image"
-              />
+                <video
+                  ref={videoRef}
+                  className={`media-video ${expanded ? "full" : "videobox"}`}
+                  src={demoSrc}
+                  poster={process.env.REACT_APP_DEMO_POSTER}
+                  controls={expanded}
+                  playsInline
+                  onClick={() => {
+                    // clicking the boxed video should behave like pressing Watch Demo
+                    if (!expanded) {
+                      enterExpanded();
+                    }
+                  }}
+                  onEnded={handleVideoEnded}
+                  muted={false}
+                />
             </div>
           </div>
+          {/* overlay close area when expanded */}
+          {expanded && (
+            <div
+              className="media-overlay"
+              onClick={() => {
+                // clicking overlay closes and stops video
+                exitExpanded();
+              }}
+            />
+          )}
         </div>
       </div>
     </section>

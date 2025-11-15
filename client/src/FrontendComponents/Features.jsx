@@ -2,7 +2,7 @@ import "../styles/features.css";
 import FeatureBox from "./FeatureBox";
 function Features() {
   return (
-    <section className="features">
+    <section className="features" id="features">
       <div className="feature_Container">
         <div className="feature_heading">
           <h3>Powerful Features for Modern File Sharing</h3>

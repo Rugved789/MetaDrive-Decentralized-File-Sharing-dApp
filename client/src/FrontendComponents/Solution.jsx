@@ -2,7 +2,7 @@ import "../styles/solution.css";
 
 function Solution() {
   return (
-    <section className="Solution">
+    <section className="Solution" id="about">
       <div className="solutionContainer">
         <div className="solInfo">
           <div className="InfoText">

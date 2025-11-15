@@ -116,7 +116,6 @@
   background-color: rgba(255, 255, 255, 0.833);
   border-radius: 20px;
   /* 3xl in Tailwind */
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   /* shadow-2xl */
   padding: 32px;
 }
@@ -125,4 +124,104 @@
   height: 520px;
   width: 520px;
   border-radius: 20px;
+}
+
+
+/* Media container for image/video toggle (Watch Demo) */
+.media-container {
+  position: relative;
+  width: 585px; /* match original layout */
+  height: 300px;
+  overflow: hidden;
+  /* match original card styling from .imageContainer */
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-container .imageContainer {
+  padding: 0; /* the card already has padding */
+  background: transparent;
+}
+
+.media-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  transition: opacity 450ms cubic-bezier(.2,.8,.2,1), transform 450ms cubic-bezier(.2,.8,.2,1);
+  will-change: opacity, transform;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.media-video {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+  box-sizing: border-box;
+  transition: all 420ms cubic-bezier(.2,.8,.2,1);
+  transform-origin: center center;
+  background: black;
+  display: block;
+}
+
+/* Two visual states: box (small) and full (expanded)
+   - .media-video.box matches the original box size inside the hero
+   - .media-container.expanded makes the container fixed and grows to viewport */
+.media-video.videobox {
+  /* Use border-box so border is included in the size and doesn't overflow the card
+     Use percentage sizing so the video fills the card's content area consistently
+     across browsers (Chrome/Edge rendering differences were caused by border adding
+     to the fixed pixel size). */
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  border: 10px solid #0b0b0b; /* decorative frame to match the mocked design */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  background: #000;
+  cursor: pointer;
+}
+
+.media-video.box:hover {
+  transform: scale(1.01);
+}
+
+
+.media-container.expanded {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  height: 90vh;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 8px;
+}
+
+.media-container.expanded .media-video {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: none; /* remove decorative frame when fullscreen */
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+}
+
+/* overlay clickable area to close when expanded */
+.media-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9998;
 }

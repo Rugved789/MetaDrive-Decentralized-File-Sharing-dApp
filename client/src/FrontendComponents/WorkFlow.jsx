@@ -2,7 +2,7 @@ import "../styles/workflow.css";
 
 function WorkFlow() {
   return (
-    <section className="workflow">
+    <section className="workflow" id="how-it-works">
       <div className="workContainer">
         <div className="workHeading">
           <h2>How It Works</h2>
