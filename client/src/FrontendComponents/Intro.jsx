@@ -1,6 +1,6 @@
 import "../styles/intro.css";
 import { Link } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import metadriveVideo from "./MetaDrive_ Decentralized Future (1).mp4";
 
 function Intro() {
@@ -49,22 +49,6 @@ function Intro() {
    * - ref is accessed in effect body
    * - cleanup uses the same stable reference
    */
-  useEffect(() => {
-    const v = videoRef.current;
-
-    // touch ref during effect execution (important for CRA ESLint)
-    if (v) {
-      // no-op
-    }
-
-    return () => {
-      if (v) {
-        try {
-          v.pause();
-        } catch (e) {}
-      }
-    };
-  }, []);
 
   return (
     <section className="main">
