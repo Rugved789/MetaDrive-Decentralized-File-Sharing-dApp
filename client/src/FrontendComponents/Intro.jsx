@@ -45,15 +45,19 @@ function Intro() {
   };
 
   useEffect(() => {
-    return () => {
-      const v = videoRef.current;
-      if (v) {
-        try {
-          v.pause();
-        } catch (e) {}
+  const v = videoRef.current; // ✅ capture once
+
+  return () => {
+    if (v) {
+      try {
+        v.pause();
+      } catch (e) {
+        // optional: console.error(e);
       }
-    };
-  }, []);
+    }
+  };
+}, []);
+
   return (
     <section className="main">
       <div className="intro-container">
